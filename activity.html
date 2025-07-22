@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Game</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        #quiz-container{
+            margin-top: 30px;
+        }
+        #option-buttons{
+            display: block;
+            margin: 10px, 0;
+            padding: 10px;
+            width: 100;
+        }
+        h1, h2{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz Game</h1>
+    <div id="quiz-container">
+        <div id="questions"></div>
+        <div id="options"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                questions: "What is the Capital of France?",
+                options: ["Paris","Berlin","Madrid","Rome"],
+                correctAnswer:"Paris"
+            },
+            {
+                questions: "Which Planet is known as the Red Planet?",
+                options: ["Earth","Mars","Jupiter","Saturn"],
+                correctAnswer:"Mars"
+            },
+            {
+                questions: "Who painted Mona Lisa?",
+                options: ["Vincent Van Gogh","Leonardo Da Vinci","Pablo Picasso","Claude Monet"],
+                correctAnswer:"Paris"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function displayQuestion(){
+            const currentQuestion = quizData[currentQuestionIndex];
+            const questionElement = document.getElementById("question");
+            const optionsElement = document.getElementById("options");
+
+            questionElement.textContent = currentQuestion.question;
+            optionsElement.innerHTML = " ";
+
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () =>checkAnswer(option);
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectOption){
+            const correct = quizData[currentQuestionIndex].correctAnswer;
+
+            if(selectOption === correct){
+                score++;
+                alert("Correct!");
+            }else{
+                alert("Incorrect. The correct answer is "+ correct);
+            }
+            currentQuestionIndex++;
+
+            if(currentQuestionIndex < quizData.length){
+                displayQuestion();
+            }else{
+                endQuiz();
+            }
+        }
+
+        function endQuiz(){
+            const container = document.getElementById("quiz-container");
+            container.innerHTML = '
+            <h2>Quiz Complete!</h2>
+            <p>Your final score is: ${score}/${quizData.length}' 
+        }
+    </script>
+</body>
+</html>
