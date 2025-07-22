@@ -1,98 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Quiz Game</title>
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
-        }
-        #quiz-container{
-            margin-top: 30px;
-        }
-        #option-buttons{
-            display: block;
-            margin: 10px, 0;
-            padding: 10px;
-            width: 100;
-        }
-        h1, h2{
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Simple JS Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 50px;
+    }
+
+    #quiz-container {
+      background-color: #fff;
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    #question {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    #choices button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #choices button:hover {
+      background-color: #2980b9;
+    }
+
+    #choices button:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    #feedback {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    #score {
+      margin: 10px 0;
+      color: #27ae60;
+    }
+
+    button#next-btn {
+      margin-top: 15px;
+      padding: 8px 16px;
+      font-size: 14px;
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button#next-btn:hover {
+      background-color: #27ae60;
+    }
+  </style>
 </head>
 <body>
-    <h1>Quiz Game</h1>
-    <div id="quiz-container">
-        <div id="questions"></div>
-        <div id="options"></div>
-    </div>
+  <h2>JavaScript Quiz</h2>
+  <div id="quiz-container">
+    <p id="question"></p>
+    <div id="choices"></div>
+    <p id="feedback"></p>
+    <p id="score"></p>
+    <button id="next-btn" onclick="nextQuestion()">Next</button>
+  </div>
 
-    <script>
-        const quizData = [
-            {
-                questions: "What is the Capital of France?",
-                options: ["Paris","Berlin","Madrid","Rome"],
-                correctAnswer:"Paris"
-            },
-            {
-                questions: "Which Planet is known as the Red Planet?",
-                options: ["Earth","Mars","Jupiter","Saturn"],
-                correctAnswer:"Mars"
-            },
-            {
-                questions: "Who painted Mona Lisa?",
-                options: ["Vincent Van Gogh","Leonardo Da Vinci","Pablo Picasso","Claude Monet"],
-                correctAnswer:"Paris"
-            }
-        ];
+  <script>
+    const questions = [
+      {
+        question: "What does HTML stand for?",
+        choices: ["HyperText Markup Language", "HighText Machine Language", "Hyper Transfer Markup Language"],
+        correctAnswer: "HyperText Markup Language"
+      },
+      {
+        question: "Which tag is used for JavaScript?",
+        choices: ["<js>", "<javascript>", "<script>"],
+        correctAnswer: "<script>"
+      },
+      {
+        question: "What is used to declare a variable in JavaScript?",
+        choices: ["int", "var", "let"],
+        correctAnswer: "let"
+      }
+    ];
 
-        let currentQuestionIndex = 0;
-        let score = 0;
+    let currentQuestion = 0;
+    let score = 0;
 
-        function displayQuestion(){
-            const currentQuestion = quizData[currentQuestionIndex];
-            const questionElement = document.getElementById("question");
-            const optionsElement = document.getElementById("options");
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question").innerText = q.question;
 
-            questionElement.textContent = currentQuestion.question;
-            optionsElement.innerHTML = " ";
+      const choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
 
-            currentQuestion.options.forEach(option => {
-                const button = document.createElement("button");
-                button.textContent = option;
-                button.onclick = () =>checkAnswer(option);
-                optionsElement.appendChild(button);
-            });
-        }
+      for (let i = 0; i < q.choices.length; i++) {
+        const btn = document.createElement("button");
+        btn.innerText = q.choices[i];
+        btn.onclick = checkAnswer;
+        choicesDiv.appendChild(btn);
+      }
 
-        function checkAnswer(selectOption){
-            const correct = quizData[currentQuestionIndex].correctAnswer;
+      document.getElementById("feedback").innerText = "";
+      document.getElementById("score").innerText = "Score: " + score;
+    }
 
-            if(selectOption === correct){
-                score++;
-                alert("Correct!");
-            }else{
-                alert("Incorrect. The correct answer is "+ correct);
-            }
-            currentQuestionIndex++;
+    function checkAnswer(event) {
+      const selected = event.target.innerText;
+      const correct = questions[currentQuestion].correctAnswer;
 
-            if(currentQuestionIndex < quizData.length){
-                displayQuestion();
-            }else{
-                endQuiz();
-            }
-        }
+      if (selected === correct) {
+        document.getElementById("feedback").innerText = "Correct!";
+        score++;
+      } else {
+        document.getElementById("feedback").innerText = "Incorrect!";
+      }
 
-        function endQuiz(){
-            const container = document.getElementById("quiz-container");
-            container.innerHTML = '
-            <h2>Quiz Complete!</h2>
-            <p>Your final score is: ${score}/${quizData.length}' 
-        }
-    </script>
+      const buttons = document.querySelectorAll("#choices button");
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+      }
+
+      document.getElementById("score").innerText = "Score: " + score;
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        endQuiz();
+      }
+    }
+
+    function endQuiz() {
+      let msg = "Your final score is: " + score + "/" + questions.length + ". ";
+      if (score === questions.length) {
+        msg += "Great job!";
+      } else {
+        msg += "You can do better!";
+      }
+
+      document.getElementById("quiz-container").innerHTML = "<h3>" + msg + "</h3>";
+    }
+
+    showQuestion();
+  </script>
 </body>
 </html>
