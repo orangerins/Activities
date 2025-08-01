@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Emoji Reaction Board</title>
+        <style>
+        body{
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .h1{
+            margin-bottom: 10px;
+        }
+
+        .emoji-buttons{
+            margin-bottom: 20px;
+        }
+
+        .emoji-button{
+            font-size: 24px;
+            cursor: pointer;
+            margin: 0 8px;
+            padding: 5px 12px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            transition: 0.3s;
+            background-color: #f5f5f5;
+        }
+
+        .emoji-button:hover{
+            background-color: #e0e0e0;
+        }
+
+        .emoji-button.selected{
+            border-color: #555;
+            background-color: #dcdcdc;
+        }
+        .grid{
+            display: grid;
+            grid-template-columns: repeat(6, 60px);
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .cell{
+            width: 60px;
+            height: 60px;
+            background-color: #fafafa;
+            border: 1px solid #ccc;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .cel:hover{
+            background-color: #f0f0f0;
+        }
+        </style>
+        </head>
+        <body>
+            <h1>Emoji Reaction Board</h1>
+            <div class="emoji-buttons">
+                <button class="emoji-button">&#128512;</button>
+                <button class="emoji-button">&#128513;</button>
+                <button class="emoji-button">&#128545;</button>
+                <button class="emoji-button">&#128514;</button>
+                <button class="emoji-button">&#128077;</button>
+                <button class="emoji-button">&#128078;</button>
+            </div>
+
+            <div class="grid" id="grid"></div>
+            <script>
+                const emojiButtons = document.querySelectorAll('.emoji-button');
+                const grid = document.getElementById('grid');
+                let selectedEmoji = null;
+
+                emojiButtons.forEach(button =>{
+                    button.addEventListener('click', () => {
+                        emojiButtons.forEach(btn => btn.classList.remove('selected'));
+                        button.classList.add('selected')
+                        selectedEmoji=button.innerHTML;
+                    });
+                });
+
+                for(let i=0;i<36;i++){
+                    const cell = document.createElement('div');
+                    cell.classList.add('')
+                }
+            </script>
+        </body>
+</html>
